@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DadosModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="cliente">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nome" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="telefone" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="endereco" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="fabricante">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nome" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="cidade" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="produto" Relationship="Self.FK_Fabricante" FromRole="fabricante" ToRole="produto" />
+  </EntityType>
+  <EntityType Name="produto">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="descricao" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="fabricante" Type="Int32" />
+    <Property Name="preco" Type="Decimal" Precision="7" Scale="2" />
+    <NavigationProperty Name="fabricante1" Relationship="Self.FK_Fabricante" FromRole="produto" ToRole="fabricante" />
+  </EntityType>
+  <Association Name="FK_Fabricante">
+    <End Role="fabricante" Type="Self.fabricante" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="produto" Type="Self.produto" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="fabricante">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="produto">
+        <PropertyRef Name="fabricante" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DadosEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="cliente" EntityType="Self.cliente" />
+    <EntitySet Name="fabricante" EntityType="Self.fabricante" />
+    <EntitySet Name="produto" EntityType="Self.produto" />
+    <AssociationSet Name="FK_Fabricante" Association="Self.FK_Fabricante">
+      <End Role="fabricante" EntitySet="fabricante" />
+      <End Role="produto" EntitySet="produto" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
